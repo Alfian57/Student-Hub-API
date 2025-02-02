@@ -4,11 +4,13 @@ import (
 	"github/Alfian57/student-hub-api/internal/store"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type application struct {
 	config config
 	store  store.Storage
+	logger *zap.SugaredLogger
 }
 
 type config struct {
