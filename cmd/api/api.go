@@ -51,6 +51,13 @@ func (app *application) mount() *gin.Engine {
 				projectCategory.PUT("/:slug", app.updateProjectCategoryHandler)
 				projectCategory.DELETE("/:slug", app.deleteProjectCategoryHandler)
 			}
+
+			blog := admin.Group("/blogs")
+			{
+				blog.GET("/", app.getBlogListHandler)
+				blog.GET("/:slug", app.getBlogDetailHandler)
+				blog.PUT("/:slug", app.blockBlogHandler)
+			}
 		}
 	}
 

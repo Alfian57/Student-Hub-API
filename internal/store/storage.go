@@ -22,14 +22,20 @@ type Storage struct {
 		Update(context.Context, string, *Category) error
 		Delete(context.Context, string) error
 	}
-	Users interface {
-		Create(context.Context, *User) error
+	Blog interface {
+		GetAll(context.Context, BlogQueryParam) (*[]Blog, error)
+		GetBySlug(context.Context, string) (*Blog, error)
+		Block(context.Context, BlockedBlog) error
 	}
+	Project interface{}
+	User    interface{}
 }
 
 func NewStorage(db *sqlx.DB) Storage {
 	return Storage{
 		Category: &CategoryStore{db},
-		Users:    &UserStore{db},
+		Blog:     &BlogStore{db},
+		Project:  &ProjectStore{db},
+		User:     &UserStore{db},
 	}
 }

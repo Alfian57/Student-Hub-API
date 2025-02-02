@@ -2,17 +2,16 @@ package store
 
 import "github.com/gin-gonic/gin"
 
-type CategoryQueryParam struct {
+type BaseQueryParam struct {
 	Page     int    `json:"page" form:"page" validate:"gte=1"`
 	Size     int    `json:"size" form:"size" validate:"gte=1,lte=100"`
-	Name     string `json:"name" form:"name" validate:"omitempty,min=1,max=100"`
-	Sort     string `json:"sort" form:"sort" validate:"omitempty,oneof=name created_at"`
+	Sort     string `json:"sort" form:"sort" validate:"omitempty"`
 	SortType string `json:"sort_type" form:"sort_type" validate:"omitempty,oneof=ASC DESC"`
 	Offset   int
 	Limit    int
 }
 
-func (q *CategoryQueryParam) Parse(c *gin.Context) error {
+func (q *BaseQueryParam) Parse(c *gin.Context) error {
 	if err := c.ShouldBindQuery(&q); err != nil {
 		return err
 	}
@@ -27,4 +26,14 @@ func (q *CategoryQueryParam) Parse(c *gin.Context) error {
 	}
 
 	return nil
+}
+
+type CategoryQueryParam struct {
+	BaseQueryParam
+	Name string `json:"name" form:"name" validate:"omitempty,min=1,max=100"`
+}
+
+type BlogQueryParam struct {
+	BaseQueryParam
+	Title string `json:"title" form:"title" validate:"omitempty,min=1,max=100"`
 }
