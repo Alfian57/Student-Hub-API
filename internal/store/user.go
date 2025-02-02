@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -10,17 +11,22 @@ type UserStore struct {
 	db *sqlx.DB
 }
 
+var (
+	UserRoleAdmin = "admin"
+	UserRoleUser  = "user"
+)
+
 type User struct {
-	ID             string `json:"id"`
-	Name           string `json:"name"`
-	Username       string `json:"username"`
-	Email          string `json:"email"`
-	Password       string `json:"-"`
-	ProfilePicture string `json:"profile_picture"`
-	Bio            string `json:"bio"`
-	Role           string `json:"role"`
-	CreatedAt      string `json:"created_at"`
-	UpdatedAt      string `json:"updated_at"`
+	ID             uuid.UUID `json:"id"`
+	Name           string    `json:"name"`
+	Username       string    `json:"username"`
+	Email          string    `json:"email"`
+	Password       string    `json:"-"`
+	ProfilePicture string    `json:"profile_picture"`
+	Bio            string    `json:"bio"`
+	Role           string    `json:"role"`
+	CreatedAt      string    `json:"created_at"`
+	UpdatedAt      string    `json:"updated_at"`
 }
 
 func (s *UserStore) Create(ctx context.Context, user *User) error {

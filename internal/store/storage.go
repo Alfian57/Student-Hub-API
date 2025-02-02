@@ -24,11 +24,16 @@ type Storage struct {
 	}
 	Blog interface {
 		GetAll(context.Context, BlogQueryParam) (*[]Blog, error)
+		Create(context.Context, *Blog) error
 		GetBySlug(context.Context, string) (*Blog, error)
 		Block(context.Context, BlockedBlog) error
 	}
-	Project interface{}
-	User    interface{}
+	Project interface {
+		Create(context.Context, *Project) error
+	}
+	User interface {
+		Create(context.Context, *User) error
+	}
 }
 
 func NewStorage(db *sqlx.DB) Storage {

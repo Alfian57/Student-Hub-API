@@ -24,7 +24,7 @@ type Blog struct {
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`
 	Thumbnail  string    `json:"thumbnail"`
-	IsPublish  string    `json:"is_publish"`
+	IsPublish  bool      `json:"is_publish"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
@@ -83,6 +83,38 @@ func (s *BlogStore) GetAll(ctx context.Context, queryParam BlogQueryParam) (*[]B
 	}
 
 	return &blogs, nil
+}
+
+func (s *BlogStore) Create(ctx context.Context, blog *Blog) error {
+	query := `
+		INSERT INTO blogs (id, user_id, category_id, slug, title, content, thumbnail, is_publish) 
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+		RETURNING created_at, updated_at;`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryContextTimeout)
+	defer cancel()
+
+	rows := s.db.QueryRowContext(
+		ctx,
+		query,
+		blog.ID,
+		blog.UserID,
+		blog.CategoryID,
+		blog.Slug,
+		blog.Title,
+		blog.Content,
+		blog.Thumbnail,
+		blog.IsPublish,
+	)
+	err := rows.Scan(
+		&blog.CreatedAt,
+		&blog.UpdatedAt,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *BlogStore) GetBySlug(ctx context.Context, slug string) (*Blog, error) {
