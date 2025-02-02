@@ -1,0 +1,10 @@
+CREATE TABLE badges(
+    id CHAR(36) NOT NULL,
+    user_id CHAR(36) NOT NULL,
+    badge_type VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+ALTER TABLE
+    badges ADD CONSTRAINT badges_user_id_foreign FOREIGN KEY(user_id) REFERENCES users(id);
